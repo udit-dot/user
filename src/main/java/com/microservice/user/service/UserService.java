@@ -19,7 +19,7 @@ public class UserService {
 
 	public UserDto getUserDetails() {
 
-		return new UserDto(1, "Udit");
+		return null;
 	}
 
 	public UserDto getUserDetailsById(Integer id) {
