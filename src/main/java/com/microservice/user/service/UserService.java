@@ -23,7 +23,13 @@ public class UserService {
 	}
 
 	public UserDto getUserDetailsById(Integer id) {
-
+		try {
+			Thread.sleep(10000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+//		throw new RuntimeException("service down");
 		User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("U not found"));
 		return mapper.map(user, UserDto.class);
 	}
