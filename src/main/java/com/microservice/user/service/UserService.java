@@ -16,6 +16,9 @@ public class UserService {
 
 	@Autowired
 	ModelMapper mapper;
+	
+	@Autowired
+	UserProducerService userProducerService;
 
 	public UserDto getUserDetails() {
 
@@ -23,14 +26,17 @@ public class UserService {
 	}
 
 	public UserDto getUserDetailsById(Integer id) {
+		
+		User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("U not found"));
+		UserDto userDto = mapper.map(user, UserDto.class);
+
+		// Send Kafka notification
 		try {
-			Thread.sleep(10000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
+			userProducerService.sendUserEvent("User data sent : " + userDto);
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-//		throw new RuntimeException("service down");
-		User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("U not found"));
-		return mapper.map(user, UserDto.class);
+
+		return userDto;
 	}
 }
